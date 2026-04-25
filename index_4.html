@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KULTR — Streetwear for the culture</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0b0b0b;--bg2:#131313;--bg3:#1a1a1a;--bg4:#242424;--bg5:#2e2e2e;
+  --text:#f2efe8;--text2:#b0ada5;--text3:#706e68;
+  --accent:#c8ff00;--accent2:#a8d900;--accent-dim:rgba(200,255,0,.08);
+  --red:#e84545;--green:#2ecc71;
+  --font-head:'Oswald',sans-serif;--font-body:'Outfit',sans-serif;
+  --r:8px;--r-lg:12px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+
+/* TOPBAR */
+.topbar{background:var(--accent);color:var(--bg);text-align:center;padding:8px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.topbar span{font-weight:400}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(11,11,11,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06)}
+.nav-inner{max-width:1320px;margin:0 auto;padding:0 24px;display:flex;align-items:center;height:60px;gap:24px}
+.logo{font-family:var(--font-head);font-size:28px;font-weight:700;letter-spacing:5px;flex-shrink:0}
+.logo em{font-style:normal;color:var(--accent)}
+.nav-cats{display:flex;gap:0;margin-left:20px}
+.nav-cat{padding:18px 16px;font-size:13px;font-weight:500;letter-spacing:.5px;color:var(--text2);transition:all .2s;position:relative;cursor:pointer}
+.nav-cat:hover,.nav-cat.active{color:var(--accent)}
+.nav-cat.active::after{content:'';position:absolute;bottom:0;left:16px;right:16px;height:2px;background:var(--accent)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:16px}
+.search-box{display:flex;align-items:center;background:var(--bg3);border-radius:24px;padding:0 14px;height:36px;width:220px;transition:width .3s}
+.search-box:focus-within{width:280px;background:var(--bg4)}
+.search-box input{background:none;border:none;color:var(--text);font-family:var(--font-body);font-size:13px;width:100%;outline:none}
+.search-box input::placeholder{color:var(--text3)}
+.search-icon{width:16px;height:16px;margin-right:8px;color:var(--text3);flex-shrink:0}
+.nav-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .2s;position:relative;background:none;border:none;color:var(--text)}
+.nav-icon:hover{background:var(--bg3)}
+.nav-icon svg{width:20px;height:20px}
+.nav-badge{position:absolute;top:2px;right:2px;width:16px;height:16px;border-radius:50%;background:var(--accent);color:var(--bg);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+/* HERO BANNER CAROUSEL */
+.hero-carousel{position:relative;overflow:hidden;height:480px}
+.hero-slide{position:absolute;inset:0;opacity:0;transition:opacity .8s;display:flex;align-items:center}
+.hero-slide.active{opacity:1}
+.hero-slide-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hero-slide-bg canvas{width:100%;height:100%}
+.hero-content{position:relative;z-index:2;max-width:1320px;margin:0 auto;padding:0 48px;width:100%}
+.hero-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;font-weight:600}
+.hero-title{font-family:var(--font-head);font-size:64px;font-weight:700;line-height:1;letter-spacing:2px;margin-bottom:12px}
+.hero-title em{font-style:normal;color:var(--accent)}
+.hero-desc{font-size:15px;color:var(--text2);max-width:400px;margin-bottom:24px;font-weight:300}
+.hero-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:var(--accent);color:var(--bg);font-family:var(--font-body);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;border:none;border-radius:var(--r);cursor:pointer;transition:all .2s}
+.hero-btn:hover{background:var(--accent2);transform:translateY(-1px)}
+.hero-dots{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:3}
+.hero-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer;transition:all .3s;border:none}
+.hero-dot.active{background:var(--accent);width:24px;border-radius:4px}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,11,11,.9) 0%,rgba(11,11,11,.5) 50%,rgba(11,11,11,.2) 100%);z-index:1}
+
+/* CATEGORIES */
+.container{max-width:1320px;margin:0 auto;padding:0 24px}
+.section{padding:48px 0}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.section-title{font-family:var(--font-head);font-size:28px;font-weight:600;letter-spacing:2px}
+.section-link{font-size:13px;color:var(--accent);font-weight:500;cursor:pointer;display:flex;align-items:center;gap:4px;transition:gap .2s}
+.section-link:hover{gap:8px}
+.cat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.cat-card{position:relative;aspect-ratio:3/4;border-radius:var(--r-lg);overflow:hidden;cursor:pointer;background:var(--bg3)}
+.cat-card-bg{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:48px;color:rgba(255,255,255,.04);letter-spacing:4px;transition:transform .5s}
+.cat-card:hover .cat-card-bg{transform:scale(1.05)}
+.cat-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(11,11,11,.85) 100%);transition:background .3s}
+.cat-card:hover .cat-overlay{background:linear-gradient(180deg,transparent 20%,rgba(11,11,11,.9) 100%)}
+.cat-info{position:absolute;bottom:0;left:0;right:0;padding:20px;z-index:1}
+.cat-name{font-family:var(--font-head);font-size:18px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
+.cat-count{font-size:12px;color:var(--text3)}
+.cat-arrow{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(4px);transition:all .3s}
+.cat-card:hover .cat-arrow{opacity:1;transform:translateY(0)}
+
+/* BANNER STRIP */
+.banner-strip{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:48px}
+.banner-card{position:relative;height:200px;border-radius:var(--r-lg);overflow:hidden;cursor:pointer;display:flex;align-items:center;padding:36px}
+.banner-card-1{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%)}
+.banner-card-2{background:linear-gradient(135deg,#1a1a1a 0%,#2d132c 100%)}
+.banner-tag{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:8px}
+.banner-title{font-family:var(--font-head);font-size:32px;font-weight:600;letter-spacing:2px;margin-bottom:6px}
+.banner-sub{font-size:13px;color:var(--text2);margin-bottom:16px}
+.banner-cta{font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:6px}
+.banner-pattern{position:absolute;right:0;top:0;bottom:0;width:40%;opacity:.03;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:140px;letter-spacing:10px;overflow:hidden}
+
+/* FILTER BAR */
+.filter-bar{display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;align-items:center}
+.filter-btn{padding:8px 18px;font-family:var(--font-body);font-size:12px;font-weight:500;letter-spacing:.5px;background:var(--bg3);color:var(--text2);border:1px solid transparent;border-radius:20px;cursor:pointer;transition:all .2s}
+.filter-btn:hover{border-color:var(--text3);color:var(--text)}
+.filter-btn.active{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:600}
+.filter-count{margin-left:auto;font-size:13px;color:var(--text3)}
+
+/* PRODUCTS GRID */
+.products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.p-card{background:var(--bg2);border-radius:var(--r-lg);overflow:hidden;cursor:pointer;transition:transform .3s;position:relative}
+.p-card:hover{transform:translateY(-4px)}
+.p-img{aspect-ratio:3/4;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.p-img-inner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;transition:transform .5s}
+.p-card:hover .p-img-inner{transform:scale(1.04)}
+.p-tee{width:55%;aspect-ratio:1/1.2;border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:20px;letter-spacing:3px;position:relative;transition:background .3s}
+.p-tee-sleeve{position:absolute;top:8%;width:16%;height:20%;border-radius:2px}
+.p-tee-sleeve.l{right:100%;border-top-left-radius:6px}
+.p-tee-sleeve.r{left:100%;border-top-right-radius:6px}
+.p-tee-collar{position:absolute;top:-2px;width:28%;height:9%;background:var(--bg2);border-radius:0 0 50% 50%}
+.p-wishlist{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;color:var(--text2);transition:all .2s;z-index:2}
+.p-wishlist:hover{background:rgba(255,255,255,.12);color:var(--red)}
+.p-wishlist.liked{color:var(--red)}
+.p-wishlist svg{width:18px;height:18px}
+.p-tag{position:absolute;top:12px;left:12px;z-index:2;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:4px}
+.p-tag-new{background:var(--accent);color:var(--bg)}
+.p-tag-best{background:var(--red);color:#fff}
+.p-tag-ltd{background:rgba(255,255,255,.12);color:var(--text);backdrop-filter:blur(4px)}
+.p-info{padding:14px 16px 18px}
+.p-brand{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.p-name{font-size:14px;font-weight:500;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.p-rating{display:flex;align-items:center;gap:4px;margin-bottom:8px}
+.p-stars{display:flex;gap:1px}
+.p-star{width:12px;height:12px;color:var(--accent)}
+.p-rating-text{font-size:11px;color:var(--text3)}
+.p-price-row{display:flex;align-items:baseline;gap:8px}
+.p-price{font-family:var(--font-head);font-size:20px;font-weight:600;letter-spacing:.5px}
+.p-mrp{font-size:12px;color:var(--text3);text-decoration:line-through}
+.p-off{font-size:11px;font-weight:700;color:var(--green)}
+.p-colors{display:flex;gap:4px;margin-top:8px}
+.p-color-dot{width:14px;height:14px;border-radius:50%;border:1.5px solid transparent;cursor:pointer;transition:border-color .2s}
+.p-color-dot:hover,.p-color-dot.active{border-color:var(--accent)}
+
+/* QUICK VIEW OVERLAY */
+.qv-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:300;display:none;align-items:center;justify-content:center;padding:2rem}
+.qv-overlay.open{display:flex}
+.qv-modal{background:var(--bg);border:1px solid rgba(255,255,255,.06);border-radius:var(--r-lg);width:100%;max-width:860px;max-height:90vh;overflow-y:auto;display:grid;grid-template-columns:1fr 1fr}
+.qv-left{padding:32px;display:flex;align-items:center;justify-content:center;background:var(--bg2);border-radius:var(--r-lg) 0 0 var(--r-lg)}
+.qv-tee{width:65%;aspect-ratio:1/1.2;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:28px;letter-spacing:4px;position:relative;transition:background .3s}
+.qv-right{padding:32px;display:flex;flex-direction:column}
+.qv-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;color:var(--text);font-size:18px;z-index:2;transition:background .2s}
+.qv-close:hover{background:var(--bg4)}
+.qv-brand{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:6px}
+.qv-name{font-family:var(--font-head);font-size:24px;font-weight:600;letter-spacing:1px;margin-bottom:12px}
+.qv-price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:16px}
+.qv-price{font-family:var(--font-head);font-size:28px;font-weight:600}
+.qv-mrp{font-size:14px;color:var(--text3);text-decoration:line-through}
+.qv-off{font-size:13px;font-weight:700;color:var(--green)}
+.qv-divider{height:1px;background:rgba(255,255,255,.06);margin:16px 0}
+.qv-label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;font-weight:500}
+.qv-colors{display:flex;gap:8px;margin-bottom:16px}
+.qv-cdot{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .2s}
+.qv-cdot:hover,.qv-cdot.active{border-color:var(--accent);transform:scale(1.1)}
+.qv-sizes{display:flex;gap:8px;margin-bottom:20px}
+.qv-size{width:44px;height:38px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;letter-spacing:.5px;background:var(--bg3);color:var(--text2);border:1px solid rgba(255,255,255,.06);border-radius:6px;cursor:pointer;transition:all .2s}
+.qv-size:hover{border-color:var(--text3)}
+.qv-size.active{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.qv-actions{display:flex;gap:10px;margin-top:auto}
+.qv-add{flex:1;padding:14px;font-family:var(--font-body);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;background:var(--accent);color:var(--bg);border:none;border-radius:var(--r);cursor:pointer;transition:all .2s}
+.qv-add:hover{background:var(--accent2)}
+.qv-add.added{background:var(--green)}
+.qv-buy{padding:14px 24px;font-family:var(--font-body);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;background:none;color:var(--text);border:1px solid rgba(255,255,255,.15);border-radius:var(--r);cursor:pointer;transition:all .2s}
+.qv-buy:hover{border-color:var(--text3);background:var(--bg3)}
+.qv-features{display:flex;gap:20px;margin-top:16px}
+.qv-feat{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3)}
+.qv-feat-icon{width:14px;height:14px;color:var(--accent)}
+
+/* CART SIDEBAR */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s}
+.cart-overlay.open{opacity:1;pointer-events:all}
+.cart-panel{position:fixed;top:0;right:-440px;width:420px;max-width:100vw;height:100vh;background:var(--bg);border-left:1px solid rgba(255,255,255,.06);z-index:201;display:flex;flex-direction:column;transition:right .35s cubic-bezier(.4,0,.2,1)}
+.cart-panel.open{right:0}
+.cart-head{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid rgba(255,255,255,.06)}
+.cart-head-title{font-family:var(--font-head);font-size:22px;font-weight:600;letter-spacing:2px}
+.cart-head-count{font-size:12px;color:var(--text3);margin-left:8px}
+.cart-close{background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .2s}
+.cart-close:hover{background:var(--bg3)}
+.cart-items{flex:1;overflow-y:auto;padding:16px 24px}
+.cart-empty{text-align:center;padding:48px 16px;color:var(--text3);font-size:14px}
+.cart-item{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.ci-img{width:72px;height:90px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-head);font-size:11px;letter-spacing:2px}
+.ci-info{flex:1}
+.ci-name{font-size:13px;font-weight:600;margin-bottom:3px}
+.ci-meta{font-size:11px;color:var(--text3);margin-bottom:8px}
+.ci-bottom{display:flex;align-items:center;justify-content:space-between}
+.ci-price{font-family:var(--font-head);font-size:16px;font-weight:600;letter-spacing:.5px}
+.ci-qty{display:flex;align-items:center;border:1px solid rgba(255,255,255,.08);border-radius:6px;overflow:hidden}
+.ci-qty-btn{width:30px;height:30px;background:var(--bg2);border:none;color:var(--text);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.ci-qty-btn:hover{background:var(--bg3)}
+.ci-qty-val{width:32px;text-align:center;font-size:12px;font-weight:600;background:var(--bg)}
+.ci-remove{background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;margin-left:8px;transition:color .2s}
+.ci-remove:hover{color:var(--red)}
+.cart-footer{padding:20px 24px;border-top:1px solid rgba(255,255,255,.06)}
+.cart-subtotal{display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px;color:var(--text2)}
+.cart-total-row{display:flex;justify-content:space-between;margin-bottom:16px;font-size:15px;font-weight:600}
+.cart-total-price{font-family:var(--font-head);font-size:22px;letter-spacing:.5px}
+.cart-checkout{width:100%;padding:16px;font-family:var(--font-body);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--accent);color:var(--bg);border:none;border-radius:var(--r);cursor:pointer;transition:all .2s;margin-bottom:8px}
+.cart-checkout:hover{background:var(--accent2)}
+.cart-checkout:disabled{opacity:.4;cursor:not-allowed}
+.cart-ig{width:100%;padding:12px;display:flex;align-items:center;justify-content:center;gap:8px;background:none;color:var(--text2);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);cursor:pointer;font-family:var(--font-body);font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:all .2s}
+.cart-ig:hover{border-color:var(--text3);color:var(--text)}
+.cart-ig svg{width:16px;height:16px}
+
+/* INSTAGRAM SECTION */
+.ig-strip{padding:48px 0;text-align:center;border-top:1px solid rgba(255,255,255,.04)}
+.ig-title{font-family:var(--font-head);font-size:28px;letter-spacing:2px;margin-bottom:8px}
+.ig-sub{font-size:14px;color:var(--text2);margin-bottom:24px}
+.ig-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:24px}
+.ig-cell{aspect-ratio:1;background:var(--bg3);border-radius:2px;display:flex;align-items:center;justify-content:center;font-family:var(--font-head);font-size:14px;color:rgba(255,255,255,.06);letter-spacing:2px;cursor:pointer;position:relative;overflow:hidden;transition:opacity .3s}
+.ig-cell:hover{opacity:.8}
+.ig-cell-overlay{position:absolute;inset:0;background:rgba(200,255,0,.08);opacity:0;transition:opacity .3s;display:flex;align-items:center;justify-content:center}
+.ig-cell:hover .ig-cell-overlay{opacity:1}
+.ig-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 36px;background:linear-gradient(135deg,#833AB4,#FD1D1D,#F77737);color:#fff;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;border-radius:var(--r);cursor:pointer;transition:transform .2s,opacity .2s;font-family:var(--font-body)}
+.ig-btn:hover{transform:translateY(-2px);opacity:.9}
+.ig-btn svg{width:18px;height:18px}
+
+/* FEATURES BAR */
+.feat-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.04);border-top:1px solid rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.04)}
+.feat-item{background:var(--bg);padding:24px;text-align:center}
+.feat-icon{font-family:var(--font-head);font-size:24px;color:var(--accent);margin-bottom:6px}
+.feat-title{font-size:13px;font-weight:600;margin-bottom:2px}
+.feat-desc{font-size:11px;color:var(--text3)}
+
+/* FOOTER */
+footer{padding:48px 0 24px;border-top:1px solid rgba(255,255,255,.04)}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.footer-brand .logo{font-size:22px;margin-bottom:12px}
+.footer-brand p{font-size:12px;color:var(--text3);line-height:1.7;max-width:280px}
+.footer-col h4{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:14px;font-weight:600}
+.footer-col a{display:block;font-size:13px;color:var(--text2);margin-bottom:8px;transition:color .2s}
+.footer-col a:hover{color:var(--accent)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;border-top:1px solid rgba(255,255,255,.04);font-size:11px;color:var(--text3)}
+.footer-pay{display:flex;gap:8px;align-items:center}
+.pay-icon{background:var(--bg3);border-radius:4px;padding:4px 8px;font-size:10px;font-weight:700;letter-spacing:.5px;color:var(--text2)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--accent);color:var(--bg);padding:12px 28px;border-radius:var(--r);font-size:13px;font-weight:700;letter-spacing:1px;z-index:500;transition:transform .35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ANIMATIONS */
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{opacity:0;animation:fadeIn .6s forwards}
+
+/* RESPONSIVE */
+@media(max-width:1024px){.products-grid{grid-template-columns:repeat(3,1fr)}.cat-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){
+  .nav-cats{display:none}.search-box{width:160px}.hero-carousel{height:360px}.hero-title{font-size:40px}
+  .products-grid{grid-template-columns:repeat(2,1fr)}.cat-grid{grid-template-columns:repeat(2,1fr)}.banner-strip{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:24px}.feat-bar{grid-template-columns:repeat(2,1fr)}.ig-grid{grid-template-columns:repeat(3,1fr)}
+  .qv-modal{grid-template-columns:1fr;max-width:420px}.qv-left{display:none}.cart-panel{width:100%}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">Free shipping on orders above ₹999 <span>|</span> Prepaid orders get 5% off <span>|</span> COD available</div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">KULT<em>R</em></a>
+    <div class="nav-cats">
+      <div class="nav-cat active">Men</div>
+      <div class="nav-cat">Women</div>
+      <div class="nav-cat">Oversized</div>
+      <div class="nav-cat">New drops</div>
+      <div class="nav-cat">Accessories</div>
+    </div>
+    <div class="nav-right">
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search tees, drops...">
+      </div>
+      <button class="nav-icon" title="Wishlist">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+      <button class="nav-icon" onclick="toggleCart()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="nav-badge" id="cart-count">0</span>
+      </button>
+      <a href="https://instagram.com/sai_kausik" target="_blank" class="nav-icon" title="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO CAROUSEL -->
+<div class="hero-carousel" id="hero-carousel">
+  <div class="hero-slide active" data-bg="#1a1a2e">
+    <div class="hero-slide-bg"><canvas id="hc1"></canvas></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-label">New drop 01</div>
+      <div class="hero-title">Wear your <em>identity.</em></div>
+      <div class="hero-desc">Limited edition streetwear. 220 GSM premium cotton. Made for those who set trends.</div>
+      <a href="#products" class="hero-btn">Shop the drop</a>
+    </div>
+  </div>
+  <div class="hero-slide" data-bg="#2d132c">
+    <div class="hero-slide-bg"><canvas id="hc2"></canvas></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-label">Oversized collection</div>
+      <div class="hero-title">Built <em>different.</em></div>
+      <div class="hero-desc">Drop-shoulder fits. Boxy cuts. The silhouette that owns the room.</div>
+      <a href="#products" class="hero-btn">Explore now</a>
+    </div>
+  </div>
+  <div class="hero-slide" data-bg="#1a2a1a">
+    <div class="hero-slide-bg"><canvas id="hc3"></canvas></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-label">Shop on Instagram</div>
+      <div class="hero-title">Culture is <em>global.</em></div>
+      <div class="hero-desc">DM us your order. Follow @kultr for exclusive drops, BTS, and early access.</div>
+      <a href="https://instagram.com/sai_kausik" target="_blank" class="hero-btn">Follow @kultr</a>
+    </div>
+  </div>
+  <div class="hero-dots" id="hero-dots"></div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="container">
+  <div class="section">
+    <div class="section-head">
+      <div class="section-title">Shop by category</div>
+      <div class="section-link">View all <span>&rarr;</span></div>
+    </div>
+    <div class="cat-grid" id="cat-grid"></div>
+  </div>
+</div>
+
+<!-- BANNER STRIP -->
+<div class="container">
+  <div class="banner-strip">
+    <div class="banner-card banner-card-1">
+      <div>
+        <div class="banner-tag">Limited edition</div>
+        <div class="banner-title">The midnight drop</div>
+        <div class="banner-sub">Exclusive designs. Once they're gone, they're gone.</div>
+        <div class="banner-cta">Shop now <span>&rarr;</span></div>
+      </div>
+      <div class="banner-pattern">KULTR</div>
+    </div>
+    <div class="banner-card banner-card-2">
+      <div>
+        <div class="banner-tag">Customise</div>
+        <div class="banner-title">Your design, your tee</div>
+        <div class="banner-sub">Send us your artwork. We print it on premium cotton.</div>
+        <div class="banner-cta">Get started <span>&rarr;</span></div>
+      </div>
+      <div class="banner-pattern">CUSTOM</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="container" id="products">
+  <div class="section">
+    <div class="section-head">
+      <div class="section-title">All products</div>
+      <div class="filter-count" id="filter-count">12 products</div>
+    </div>
+    <div class="filter-bar" id="filter-bar"></div>
+    <div class="products-grid" id="products-grid"></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="feat-bar">
+  <div class="feat-item"><div class="feat-icon">220</div><div class="feat-title">GSM premium cotton</div><div class="feat-desc">Bio-washed. Holds shape.</div></div>
+  <div class="feat-item"><div class="feat-icon">48H</div><div class="feat-title">Fast dispatch</div><div class="feat-desc">Ships pan-India in 48 hours</div></div>
+  <div class="feat-item"><div class="feat-icon">UPI</div><div class="feat-title">Secure payments</div><div class="feat-desc">UPI, cards, net banking</div></div>
+  <div class="feat-item"><div class="feat-icon">7D</div><div class="feat-title">Easy returns</div><div class="feat-desc">No questions asked</div></div>
+</div>
+
+<!-- INSTAGRAM -->
+<div class="container">
+  <div class="ig-strip">
+    <div class="ig-title">@kultr on Instagram</div>
+    <div class="ig-sub">Follow for drops, BTS, and styling inspiration. DM to order.</div>
+    <div class="ig-grid" id="ig-grid"></div>
+    <a href="https://instagram.com/sai_kausik" target="_blank" class="ig-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+      Follow @kultr
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">KULT<em>R</em></div>
+        <p>Streetwear born from the culture. Designed in India for those who wear their identity loud. Premium 220 GSM cotton, bold graphics, limited runs.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="#">Oversized tees</a><a href="#">Graphic tees</a><a href="#">New drops</a><a href="#">Accessories</a><a href="#">Custom prints</a>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <a href="#">Size guide</a><a href="#">Shipping info</a><a href="#">Returns</a><a href="#">Track order</a><a href="#">Contact us</a>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <a href="https://instagram.com/sai_kausik" target="_blank">Instagram</a><a href="#">Twitter / X</a><a href="#">WhatsApp</a><a href="#">About us</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 KULTR. All rights reserved.</span>
+      <div class="footer-pay">
+        <span class="pay-icon">UPI</span><span class="pay-icon">VISA</span><span class="pay-icon">MC</span><span class="pay-icon">Rupay</span><span class="pay-icon">COD</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+<div class="cart-panel" id="cart-panel">
+  <div class="cart-head">
+    <div><span class="cart-head-title">Cart</span><span class="cart-head-count" id="cart-head-count">(0 items)</span></div>
+    <button class="cart-close" onclick="toggleCart()">&times;</button>
+  </div>
+  <div class="cart-items" id="cart-items"><div class="cart-empty">Your cart is empty</div></div>
+  <div class="cart-footer">
+    <div class="cart-subtotal"><span>Subtotal</span><span id="cart-subtotal">₹0</span></div>
+    <div class="cart-subtotal"><span>Shipping</span><span id="cart-shipping">-</span></div>
+    <div class="cart-total-row"><span>Total</span><span class="cart-total-price" id="cart-total">₹0</span></div>
+    <button class="cart-checkout" id="cart-checkout-btn" disabled>Checkout</button>
+    <button class="cart-ig" onclick="window.open('https://instagram.com/sai_kausik','_blank')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/></svg>
+      Or buy via Instagram DM
+    </button>
+  </div>
+</div>
+
+<!-- QUICK VIEW -->
+<div class="qv-overlay" id="qv-overlay">
+  <div class="qv-modal" style="position:relative" id="qv-modal"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CATEGORIES=[
+  {name:'Oversized tees',count:24,color:'#1a2a3a'},
+  {name:'Graphic tees',count:18,color:'#2a1a2a'},
+  {name:'Solid tees',count:12,color:'#1a2a1a'},
+  {name:'Co-ord sets',count:8,color:'#2a2a1a'},
+  {name:'Accessories',count:6,color:'#1a1a2a'}
+];
+
+const FILTERS=['All','Oversized','Graphic','Solid','New drops','Limited edition','Under ₹799'];
+
+const PRODUCTS=[
+  {id:1,name:'KULTR signature oversize',desc:'Drop-shoulder fit. Signature logo.',price:799,mrp:1299,tag:'best',cat:'Oversized',rating:4.5,reviews:128,
+   colors:['#f0ede6','#0b0b0b','#6b7c3f'],cnames:['Off-white','Black','Olive'],design:'KULTR'},
+  {id:2,name:'Concrete jungle graphic',desc:'Urban skyline art. Heavy cotton.',price:899,mrp:1499,tag:'new',cat:'Graphic',rating:4.7,reviews:86,
+   colors:['#0b0b0b','#3a3a3a','#1a2a3a'],cnames:['Black','Charcoal','Navy'],design:'CNCRT'},
+  {id:3,name:'Static noise tee',desc:'Glitch-art print. Raw edge finish.',price:699,mrp:1199,tag:'',cat:'Graphic',rating:4.3,reviews:64,
+   colors:['#f0ede6','#0b0b0b','#5a2a2a'],cnames:['Off-white','Black','Maroon'],design:'STATIC'},
+  {id:4,name:'Block type oversize',desc:'Bold typography. Front + back print.',price:849,mrp:1399,tag:'ltd',cat:'Oversized',rating:4.6,reviews:92,
+   colors:['#0b0b0b','#2a2a4a','#f0ede6'],cnames:['Black','Indigo','Cream'],design:'BLOCK'},
+  {id:5,name:'Midnight rider',desc:'Biker-inspired graphic. Washed look.',price:999,mrp:1599,tag:'',cat:'Graphic',rating:4.8,reviews:156,
+   colors:['#0b0b0b','#3a3a3a','#4a3a2a'],cnames:['Black','Smoke','Brown'],design:'RIDER'},
+  {id:6,name:'Culture code',desc:'Minimal code-style print. Dev x street.',price:749,mrp:1199,tag:'new',cat:'Solid',rating:4.4,reviews:48,
+   colors:['#f0ede6','#0b0b0b','#2a3a2a'],cnames:['Off-white','Black','Forest'],design:'</>'},
+  {id:7,name:'Shadow drop oversize',desc:'Tonal shadow print. Boxy cut.',price:899,mrp:1399,tag:'',cat:'Oversized',rating:4.5,reviews:72,
+   colors:['#0b0b0b','#1a1a2e','#2a2a2a'],cnames:['Black','Midnight','Smoke'],design:'SHADOW'},
+  {id:8,name:'Neo tokyo graphic',desc:'Japanese street art inspired.',price:949,mrp:1499,tag:'new',cat:'Graphic',rating:4.9,reviews:204,
+   colors:['#0b0b0b','#f0ede6','#3a1a1a'],cnames:['Black','Cream','Crimson'],design:'NEO'},
+  {id:9,name:'Raw solid essential',desc:'No print. Pure premium cotton.',price:599,mrp:999,tag:'',cat:'Solid',rating:4.2,reviews:312,
+   colors:['#0b0b0b','#f0ede6','#3a3a3a','#1a2a3a'],cnames:['Black','Off-white','Charcoal','Navy'],design:''},
+  {id:10,name:'Glitch oversize',desc:'Digital distortion art. Statement piece.',price:949,mrp:1599,tag:'ltd',cat:'Oversized',rating:4.7,reviews:68,
+   colors:['#0b0b0b','#2a1a3a'],cnames:['Black','Purple'],design:'GLTCH'},
+  {id:11,name:'Stripes essential',desc:'Engineered stripe pattern.',price:749,mrp:1199,tag:'',cat:'Solid',rating:4.3,reviews:88,
+   colors:['#0b0b0b','#f0ede6','#1a2a1a'],cnames:['Black','Cream','Olive'],design:'///'},
+  {id:12,name:'KULTR drop 002',desc:'Second edition. Numbered print.',price:1099,mrp:1799,tag:'ltd',cat:'Oversized',rating:4.9,reviews:42,
+   colors:['#0b0b0b','#f0ede6'],cnames:['Black','Off-white'],design:'002'}
+];
+
+const SIZES=['XS','S','M','L','XL','XXL'];
+let cart=[];
+let activeFilter='All';
+let wishlist=new Set();
+
+// CATEGORIES
+function renderCats(){
+  document.getElementById('cat-grid').innerHTML=CATEGORIES.map(c=>`
+    <div class="cat-card" style="cursor:pointer" onclick="filterBy('${c.name.split(' ')[0]}')">
+      <div class="cat-card-bg" style="background:${c.color}">${c.name.split(' ')[0].toUpperCase()}</div>
+      <div class="cat-overlay"></div>
+      <div class="cat-info"><div class="cat-name">${c.name}</div><div class="cat-count">${c.count} products</div></div>
+      <div class="cat-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+    </div>`).join('');
+}
+
+// FILTERS
+function renderFilters(){
+  document.getElementById('filter-bar').innerHTML=FILTERS.map(f=>`<button class="filter-btn ${f===activeFilter?'active':''}" onclick="filterBy('${f}')">${f}</button>`).join('');
+}
+
+function filterBy(f){
+  activeFilter=f;
+  renderFilters();
+  renderProducts();
+}
+
+// PRODUCTS
+function renderProducts(){
+  const filtered=activeFilter==='All'?PRODUCTS:
+    activeFilter==='Under ₹799'?PRODUCTS.filter(p=>p.price<799):
+    activeFilter==='New drops'?PRODUCTS.filter(p=>p.tag==='new'):
+    activeFilter==='Limited edition'?PRODUCTS.filter(p=>p.tag==='ltd'):
+    PRODUCTS.filter(p=>p.cat===activeFilter);
+  document.getElementById('filter-count').textContent=filtered.length+' products';
+  document.getElementById('products-grid').innerHTML=filtered.map((p,i)=>{
+    const c=p.colors[0];const tc=isLight(c)?'#0b0b0b':'#f0ede6';
+    const off=Math.round((1-p.price/p.mrp)*100);
+    const tagClass=p.tag==='new'?'p-tag-new':p.tag==='best'?'p-tag-best':p.tag==='ltd'?'p-tag-ltd':'';
+    return`<div class="p-card fade-in" style="animation-delay:${i*60}ms" onclick="openQV(${p.id})">
+      <div class="p-img" style="background:${p.colors[0]==='#f0ede6'?'#1a1a1a':'#161616'}">
+        ${p.tag?`<div class="p-tag ${tagClass}">${p.tag==='best'?'Bestseller':p.tag==='new'?'New':p.tag==='ltd'?'Limited':''}</div>`:''}
+        <button class="p-wishlist ${wishlist.has(p.id)?'liked':''}" onclick="event.stopPropagation();toggleWish(${p.id})">
+          <svg viewBox="0 0 24 24" fill="${wishlist.has(p.id)?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+        <div class="p-img-inner">
+          <div class="p-tee" style="background:${c};color:${tc}">
+            <div class="p-tee-collar"></div>
+            <div class="p-tee-sleeve l" style="background:${c}"></div>
+            <div class="p-tee-sleeve r" style="background:${c}"></div>
+            ${p.design}
+          </div>
+        </div>
+      </div>
+      <div class="p-info">
+        <div class="p-brand">KULTR</div>
+        <div class="p-name">${p.name}</div>
+        <div class="p-rating">
+          <div class="p-stars">${'<svg class="p-star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'.repeat(Math.floor(p.rating))}</div>
+          <span class="p-rating-text">${p.rating} (${p.reviews})</span>
+        </div>
+        <div class="p-price-row">
+          <span class="p-price">₹${p.price.toLocaleString('en-IN')}</span>
+          <span class="p-mrp">₹${p.mrp.toLocaleString('en-IN')}</span>
+          <span class="p-off">${off}% off</span>
+        </div>
+        <div class="p-colors">${p.colors.map((cl,ci)=>`<div class="p-color-dot ${ci===0?'active':''}" style="background:${cl};${cl==='#f0ede6'?'box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)':''}"></div>`).join('')}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function isLight(hex){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return(r*299+g*587+b*114)/1000>128;}
+
+function toggleWish(id){wishlist.has(id)?wishlist.delete(id):wishlist.add(id);renderProducts();showToast(wishlist.has(id)?'Added to wishlist':'Removed from wishlist');}
+
+// QUICK VIEW
+function openQV(id){
+  const p=PRODUCTS.find(x=>x.id===id);const off=Math.round((1-p.price/p.mrp)*100);
+  const c=p.colors[0];const tc=isLight(c)?'#0b0b0b':'#f0ede6';
+  document.getElementById('qv-modal').innerHTML=`
+    <button class="qv-close" onclick="closeQV()">&times;</button>
+    <div class="qv-left">
+      <div class="qv-tee" id="qv-tee" style="background:${c};color:${tc}">
+        <div class="p-tee-collar"></div>
+        <div class="p-tee-sleeve l" style="background:${c}"></div>
+        <div class="p-tee-sleeve r" style="background:${c}"></div>
+        ${p.design}
+      </div>
+    </div>
+    <div class="qv-right">
+      <div class="qv-brand">KULTR</div>
+      <div class="qv-name">${p.name}</div>
+      <div class="p-rating"><div class="p-stars">${'<svg class="p-star" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'.repeat(Math.floor(p.rating))}</div><span class="p-rating-text">${p.rating} (${p.reviews} reviews)</span></div>
+      <div class="qv-price-row"><span class="qv-price">₹${p.price.toLocaleString('en-IN')}</span><span class="qv-mrp">₹${p.mrp.toLocaleString('en-IN')}</span><span class="qv-off">${off}% off</span></div>
+      <div class="qv-divider"></div>
+      <div class="qv-label">Color &mdash; <span id="qv-cname">${p.cnames[0]}</span></div>
+      <div class="qv-colors">${p.colors.map((cl,ci)=>`<div class="qv-cdot ${ci===0?'active':''}" style="background:${cl};${cl==='#f0ede6'?'box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)':''}" onclick="qvColor(${id},${ci})"></div>`).join('')}</div>
+      <div class="qv-label">Size</div>
+      <div class="qv-sizes">${SIZES.map((s,si)=>`<div class="qv-size ${si===2?'active':''}" data-si="${si}" onclick="qvSize(this)">${s}</div>`).join('')}</div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:12px">${p.desc}</div>
+      <div class="qv-actions">
+        <button class="qv-add" id="qv-add" onclick="addFromQV(${id})">Add to cart</button>
+        <button class="qv-buy" onclick="addFromQV(${id});toggleCart()">Buy now</button>
+      </div>
+      <div class="qv-features">
+        <div class="qv-feat"><svg class="qv-feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Free shipping above ₹999</div>
+        <div class="qv-feat"><svg class="qv-feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>7-day easy returns</div>
+      </div>
+    </div>`;
+  document.getElementById('qv-overlay').classList.add('open');
+}
+function closeQV(){document.getElementById('qv-overlay').classList.remove('open');}
+function qvColor(id,ci){
+  const p=PRODUCTS.find(x=>x.id===id);
+  document.querySelectorAll('.qv-cdot').forEach((d,i)=>d.classList.toggle('active',i===ci));
+  document.getElementById('qv-cname').textContent=p.cnames[ci];
+  const tee=document.getElementById('qv-tee');const c=p.colors[ci];const tc=isLight(c)?'#0b0b0b':'#f0ede6';
+  tee.style.background=c;tee.style.color=tc;
+  tee.querySelectorAll('.p-tee-sleeve').forEach(s=>s.style.background=c);
+}
+function qvSize(el){document.querySelectorAll('.qv-size').forEach(s=>s.classList.remove('active'));el.classList.add('active');}
+function addFromQV(id){
+  const p=PRODUCTS.find(x=>x.id===id);
+  const ci=Array.from(document.querySelectorAll('.qv-cdot')).findIndex(d=>d.classList.contains('active'));
+  const si=Array.from(document.querySelectorAll('.qv-size')).findIndex(d=>d.classList.contains('active'));
+  const existing=cart.find(x=>x.pid===id&&x.ci===ci&&x.si===si);
+  if(existing){existing.qty++;}else{
+    cart.push({pid:id,ci:ci>-1?ci:0,si:si>-1?si:2,qty:1,name:p.name,price:p.price,color:p.colors[ci>-1?ci:0],cname:p.cnames[ci>-1?ci:0],size:SIZES[si>-1?si:2],design:p.design});
+  }
+  updateCart();
+  const btn=document.getElementById('qv-add');btn.textContent='Added!';btn.classList.add('added');
+  setTimeout(()=>{btn.textContent='Add to cart';btn.classList.remove('added');},1200);
+  showToast(`${p.name} added to cart`);
+}
+
+// CART
+function updateCart(){
+  const count=cart.reduce((a,b)=>a+b.qty,0);
+  document.getElementById('cart-count').textContent=count;
+  document.getElementById('cart-head-count').textContent=`(${count} items)`;
+  const subtotal=cart.reduce((a,b)=>a+b.price*b.qty,0);
+  const shipping=subtotal>=999?0:79;
+  document.getElementById('cart-subtotal').textContent='₹'+subtotal.toLocaleString('en-IN');
+  document.getElementById('cart-shipping').textContent=shipping===0?'Free':'₹'+shipping;
+  document.getElementById('cart-total').textContent='₹'+(subtotal+shipping).toLocaleString('en-IN');
+  document.getElementById('cart-checkout-btn').disabled=cart.length===0;
+  const el=document.getElementById('cart-items');
+  if(!cart.length){el.innerHTML='<div class="cart-empty">Your cart is empty</div>';return;}
+  el.innerHTML=cart.map((item,idx)=>{
+    const tc=isLight(item.color)?'#0b0b0b':'#f0ede6';
+    return`<div class="cart-item">
+      <div class="ci-img" style="background:${item.color};color:${tc}">${item.design}</div>
+      <div class="ci-info">
+        <div class="ci-name">${item.name}</div>
+        <div class="ci-meta">${item.cname} &middot; ${item.size}</div>
+        <div class="ci-bottom">
+          <div class="ci-price">₹${(item.price*item.qty).toLocaleString('en-IN')}</div>
+          <div style="display:flex;align-items:center">
+            <div class="ci-qty">
+              <button class="ci-qty-btn" onclick="changeQty(${idx},-1)">&minus;</button>
+              <span class="ci-qty-val">${item.qty}</span>
+              <button class="ci-qty-btn" onclick="changeQty(${idx},1)">+</button>
+            </div>
+            <button class="ci-remove" onclick="removeItem(${idx})">&times;</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function changeQty(i,d){cart[i].qty+=d;if(cart[i].qty<1)cart.splice(i,1);updateCart();}
+function removeItem(i){cart.splice(i,1);updateCart();}
+function toggleCart(){document.getElementById('cart-overlay').classList.toggle('open');document.getElementById('cart-panel').classList.toggle('open');}
+
+// IG GRID
+function renderIG(){
+  const labels=['KULTR','DROP','STREET','BOLD','LOOK','STYLE'];
+  document.getElementById('ig-grid').innerHTML=labels.map((l,i)=>{
+    const hues=['#1a2a3a','#2a1a2a','#1a2a1a','#2a2a1a','#1a1a2a','#2a1a1a'];
+    return`<div class="ig-cell" style="background:${hues[i]}"><span>${l}</span><div class="ig-cell-overlay"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/></svg></div></div>`;
+  }).join('');
+}
+
+// HERO CAROUSEL
+let currentSlide=0;
+const slides=document.querySelectorAll('.hero-slide');
+function initCarousel(){
+  const dots=document.getElementById('hero-dots');
+  dots.innerHTML=Array.from(slides).map((_,i)=>`<button class="hero-dot ${i===0?'active':''}" onclick="goSlide(${i})"></button>`).join('');
+  setInterval(()=>goSlide((currentSlide+1)%slides.length),5000);
+}
+function goSlide(n){
+  slides[currentSlide].classList.remove('active');
+  currentSlide=n;
+  slides[currentSlide].classList.add('active');
+  document.querySelectorAll('.hero-dot').forEach((d,i)=>d.classList.toggle('active',i===n));
+}
+
+// HERO CANVAS BG
+function initHeroBg(){
+  ['hc1','hc2','hc3'].forEach((id,idx)=>{
+    const canvas=document.getElementById(id);if(!canvas)return;
+    const ctx=canvas.getContext('2d');
+    const colors=[['#c8ff00','#1a1a2e'],['#ff6b9d','#2d132c'],['#4ade80','#1a2a1a']];
+    let frame=0;
+    function resize(){canvas.width=canvas.parentElement.offsetWidth;canvas.height=canvas.parentElement.offsetHeight;}
+    resize();window.addEventListener('resize',resize);
+    const shapes=[];
+    for(let i=0;i<12;i++){shapes.push({x:Math.random()*2000,y:Math.random()*800,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.2,size:Math.random()*60+20,rot:Math.random()*6.28,rv:(Math.random()-.5)*.005,op:Math.random()*.04+.01});}
+    (function draw(){
+      frame++;ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle=colors[idx][1];ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.globalAlpha=.03;ctx.fillStyle=colors[idx][0];
+      ctx.beginPath();ctx.arc(canvas.width*.6,canvas.height*.4,200+Math.sin(frame*.005)*40,0,Math.PI*2);ctx.fill();
+      ctx.globalAlpha=1;
+      shapes.forEach(s=>{
+        s.x+=s.vx;s.y+=s.vy;s.rot+=s.rv;
+        if(s.x>canvas.width+100)s.x=-100;if(s.x<-100)s.x=canvas.width+100;
+        if(s.y>canvas.height+100)s.y=-100;if(s.y<-100)s.y=canvas.height+100;
+        ctx.save();ctx.translate(s.x,s.y);ctx.rotate(s.rot);ctx.globalAlpha=s.op;
+        ctx.strokeStyle=colors[idx][0];ctx.lineWidth=.5;
+        ctx.strokeRect(-s.size/2,-s.size/2,s.size,s.size);
+        ctx.restore();
+      });
+      requestAnimationFrame(draw);
+    })();
+  });
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+
+// INIT
+renderCats();renderFilters();renderProducts();renderIG();initCarousel();initHeroBg();updateCart();
+document.getElementById('qv-overlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeQV();});
+</script>
+</body>
+</html>
