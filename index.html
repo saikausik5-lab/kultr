@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KULTR — Streetwear for the culture</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0a;--bg2:#141414;--bg3:#1e1e1e;--bg4:#282828;
+  --text:#f0ede6;--text2:#a8a49b;--text3:#6b6860;
+  --accent:#d4ff2b;--accent2:#b8e000;
+  --red:#e24b4a;--border:#2a2a2a;
+  --font-display:'Bebas Neue',sans-serif;
+  --font-body:'DM Sans',sans-serif;
+  --radius:6px;--radius-lg:12px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,10,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-family:var(--font-display);font-size:32px;letter-spacing:6px;color:var(--text)}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:2rem;align-items:center}
+.nav-links a{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text2);transition:color .2s}
+.nav-links a:hover{color:var(--accent)}
+.cart-btn{position:relative;cursor:pointer;background:none;border:none;color:var(--text);font-size:13px;letter-spacing:1.5px;text-transform:uppercase;font-family:var(--font-body);display:flex;align-items:center;gap:6px}
+.cart-count{background:var(--accent);color:var(--bg);font-size:10px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.ig-link{display:flex;align-items:center;gap:6px;background:var(--bg3);padding:6px 14px;border-radius:20px;font-size:12px;color:var(--text);letter-spacing:1px;text-transform:uppercase;transition:background .2s}
+.ig-link:hover{background:var(--bg4)}
+.ig-link svg{width:16px;height:16px}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:6rem 2rem 4rem;position:relative;overflow:hidden}
+.hero-canvas{position:absolute;inset:0;z-index:0;pointer-events:none}
+.hero-overlay{position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse at center,rgba(10,10,10,.3) 0%,rgba(10,10,10,.85) 70%,rgba(10,10,10,.95) 100%);pointer-events:none}
+.hero-scanlines{position:absolute;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 4px)}
+.hero-grain{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.06;animation:grain .3s steps(4) infinite}
+.hero::before{content:'KULTR';position:absolute;font-family:var(--font-display);font-size:min(28vw,320px);color:rgba(255,255,255,.02);letter-spacing:20px;pointer-events:none;user-select:none;z-index:3}
+.hero-tag,.hero h1,.hero-sub,.hero-cta,.scroll-hint{position:relative;z-index:4}
+.hero-tag{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem;opacity:0;animation:fadeUp .8s .2s forwards}
+.hero h1{font-family:var(--font-display);font-size:clamp(48px,10vw,120px);line-height:.9;letter-spacing:4px;margin-bottom:1.5rem;opacity:0;animation:fadeUp .8s .4s forwards;text-shadow:0 0 80px rgba(212,255,43,.08)}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero-sub{font-size:16px;color:var(--text2);max-width:440px;margin-bottom:2.5rem;opacity:0;animation:fadeUp .8s .6s forwards}
+.hero-cta{display:flex;gap:12px;opacity:0;animation:fadeUp .8s .8s forwards}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-2px,2px)}50%{transform:translate(2px,-1px)}75%{transform:translate(-1px,-2px)}100%{transform:translate(1px,1px)}}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;font-family:var(--font-body);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;border-radius:var(--radius);transition:all .2s}
+.btn-primary{background:var(--accent);color:var(--bg)}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn-outline:hover{border-color:var(--text3);background:var(--bg2)}
+.scroll-hint{position:absolute;bottom:2rem;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);animation:pulse 2s infinite}
+
+/* MARQUEE */
+.marquee{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:14px 0;overflow:hidden;white-space:nowrap}
+.marquee-inner{display:inline-flex;animation:scroll 20s linear infinite}
+.marquee-inner span{font-family:var(--font-display);font-size:18px;letter-spacing:6px;margin-right:3rem;color:var(--text3)}
+.marquee-inner span b{color:var(--accent);font-weight:400}
+
+/* PRODUCTS */
+.section{padding:5rem 2rem}
+.section-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem}
+.section-title{font-family:var(--font-display);font-size:48px;letter-spacing:3px}
+.section-sub{font-size:13px;color:var(--text3);letter-spacing:1px;text-transform:uppercase}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.product-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:border-color .3s,transform .3s}
+.product-card:hover{border-color:var(--bg4);transform:translateY(-4px)}
+.product-img{width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.product-img .tee-visual{width:60%;height:70%;border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:24px;letter-spacing:4px;color:var(--bg);position:relative;transition:background .3s}
+.product-img .tee-sleeve-l,.product-img .tee-sleeve-r{position:absolute;top:8%;width:18%;height:22%;border-radius:2px;transition:background .3s}
+.product-img .tee-sleeve-l{right:100%;border-top-left-radius:8px;transform:rotate(0deg)}
+.product-img .tee-sleeve-r{left:100%;border-top-right-radius:8px}
+.product-img .tee-collar{position:absolute;top:-2px;width:30%;height:10%;background:var(--bg2);border-radius:0 0 50% 50%}
+.product-tag{position:absolute;top:12px;left:12px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:3px;background:var(--accent);color:var(--bg)}
+.product-info{padding:16px 20px 20px}
+.product-name{font-weight:700;font-size:15px;margin-bottom:4px}
+.product-desc{font-size:12px;color:var(--text3);margin-bottom:12px}
+.product-price{font-family:var(--font-display);font-size:22px;letter-spacing:1px;margin-bottom:14px}
+.product-price .mrp{font-size:14px;color:var(--text3);text-decoration:line-through;margin-left:8px;font-family:var(--font-body)}
+
+/* OPTIONS */
+.option-label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.color-options{display:flex;gap:6px;margin-bottom:12px}
+.color-dot{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:border-color .2s,transform .15s}
+.color-dot:hover{transform:scale(1.15)}
+.color-dot.active{border-color:var(--accent)}
+.size-options{display:flex;gap:6px;margin-bottom:16px}
+.size-btn{width:36px;height:32px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;letter-spacing:1px;background:var(--bg3);color:var(--text2);border:1px solid var(--border);border-radius:4px;cursor:pointer;transition:all .2s}
+.size-btn:hover{border-color:var(--text3)}
+.size-btn.active{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.add-cart-btn{width:100%;padding:12px;font-family:var(--font-body);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--text);color:var(--bg);border:none;border-radius:var(--radius);cursor:pointer;transition:all .2s}
+.add-cart-btn:hover{background:var(--accent);transform:translateY(-1px)}
+.add-cart-btn:active{transform:scale(.98)}
+.added-feedback{background:var(--accent) !important;color:var(--bg) !important}
+
+/* FEATURES */
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;padding:3rem 2rem 5rem}
+.feat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;text-align:center}
+.feat-icon{font-family:var(--font-display);font-size:28px;color:var(--accent);margin-bottom:8px}
+.feat-title{font-size:13px;font-weight:700;margin-bottom:4px}
+.feat-desc{font-size:12px;color:var(--text3);line-height:1.5}
+
+/* INSTAGRAM CTA */
+.ig-section{padding:4rem 2rem;text-align:center;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.ig-section h2{font-family:var(--font-display);font-size:40px;letter-spacing:3px;margin-bottom:8px}
+.ig-section p{font-size:14px;color:var(--text2);margin-bottom:1.5rem}
+.ig-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 36px;background:linear-gradient(135deg,#833AB4,#FD1D1D,#F77737);color:#fff;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;border-radius:var(--radius);cursor:pointer;transition:transform .2s,opacity .2s}
+.ig-btn:hover{transform:translateY(-2px);opacity:.9}
+.ig-btn svg{width:20px;height:20px}
+
+/* CART SIDEBAR */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s}
+.cart-overlay.open{opacity:1;pointer-events:all}
+.cart-panel{position:fixed;top:0;right:-420px;width:400px;max-width:100vw;height:100vh;background:var(--bg);border-left:1px solid var(--border);z-index:201;display:flex;flex-direction:column;transition:right .35s cubic-bezier(.4,0,.2,1)}
+.cart-panel.open{right:0}
+.cart-head{display:flex;justify-content:space-between;align-items:center;padding:1.5rem;border-bottom:1px solid var(--border)}
+.cart-head h3{font-family:var(--font-display);font-size:24px;letter-spacing:3px}
+.close-cart{background:none;border:none;color:var(--text);font-size:24px;cursor:pointer;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .2s}
+.close-cart:hover{background:var(--bg3)}
+.cart-items{flex:1;overflow-y:auto;padding:1rem 1.5rem}
+.cart-empty{text-align:center;padding:3rem 1rem;color:var(--text3);font-size:14px}
+.cart-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.cart-item-img{width:64px;height:64px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-display);font-size:10px;letter-spacing:2px;color:var(--bg)}
+.cart-item-info{flex:1}
+.cart-item-name{font-size:13px;font-weight:700;margin-bottom:2px}
+.cart-item-meta{font-size:11px;color:var(--text3);margin-bottom:6px}
+.cart-item-bottom{display:flex;align-items:center;justify-content:space-between}
+.cart-item-price{font-family:var(--font-display);font-size:16px;letter-spacing:1px}
+.qty-ctrl{display:flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.qty-btn{width:28px;height:28px;background:var(--bg2);border:none;color:var(--text);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.qty-btn:hover{background:var(--bg3)}
+.qty-val{width:30px;text-align:center;font-size:12px;font-weight:700;background:var(--bg)}
+.remove-item{background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;transition:color .2s}
+.remove-item:hover{color:var(--red)}
+.cart-footer{padding:1.5rem;border-top:1px solid var(--border)}
+.cart-total{display:flex;justify-content:space-between;margin-bottom:16px}
+.cart-total-label{font-size:14px;color:var(--text2)}
+.cart-total-val{font-family:var(--font-display);font-size:24px;letter-spacing:1px}
+.checkout-btn{width:100%;padding:16px;font-family:var(--font-body);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--accent);color:var(--bg);border:none;border-radius:var(--radius);cursor:pointer;transition:all .2s;margin-bottom:8px}
+.checkout-btn:hover{background:var(--accent2)}
+.checkout-btn:disabled{opacity:.4;cursor:not-allowed}
+.ig-checkout{width:100%;padding:12px;display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-body);font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;background:transparent;color:var(--text2);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all .2s}
+.ig-checkout:hover{border-color:var(--text3);color:var(--text)}
+.ig-checkout svg{width:16px;height:16px}
+
+/* CHECKOUT MODAL */
+.checkout-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:300;display:none;align-items:center;justify-content:center;padding:2rem}
+.checkout-overlay.open{display:flex}
+.checkout-modal{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);width:100%;max-width:480px;max-height:90vh;overflow-y:auto;padding:2rem}
+.checkout-modal h3{font-family:var(--font-display);font-size:28px;letter-spacing:3px;margin-bottom:6px}
+.checkout-modal .subtitle{font-size:13px;color:var(--text3);margin-bottom:1.5rem}
+.form-row{margin-bottom:14px}
+.form-row label{display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
+.form-row input,.form-row select{width:100%;padding:12px 14px;font-family:var(--font-body);font-size:14px;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:var(--radius);transition:border-color .2s}
+.form-row input:focus,.form-row select:focus{outline:none;border-color:var(--accent)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.order-summary{background:var(--bg2);border-radius:var(--radius);padding:16px;margin:1.5rem 0}
+.order-line{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;color:var(--text2)}
+.order-line.total{border-top:1px solid var(--border);margin-top:8px;padding-top:10px;font-weight:700;color:var(--text);font-size:15px}
+.place-order-btn{width:100%;padding:16px;font-family:var(--font-body);font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--accent);color:var(--bg);border:none;border-radius:var(--radius);cursor:pointer;transition:all .2s;margin-top:8px}
+.place-order-btn:hover{background:var(--accent2)}
+.close-modal{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text);font-size:24px;cursor:pointer}
+
+/* FOOTER */
+footer{padding:3rem 2rem;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;justify-content:space-between;gap:2rem}
+.footer-brand .logo{font-size:24px}
+.footer-brand p{font-size:12px;color:var(--text3);margin-top:6px;max-width:260px;line-height:1.6}
+.footer-col h4{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.footer-col a{display:block;font-size:13px;color:var(--text2);margin-bottom:6px;transition:color .2s}
+.footer-col a:hover{color:var(--accent)}
+.footer-bottom{width:100%;text-align:center;padding-top:2rem;border-top:1px solid var(--border);font-size:11px;color:var(--text3);letter-spacing:1px}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--accent);color:var(--bg);padding:12px 24px;border-radius:var(--radius);font-size:13px;font-weight:700;letter-spacing:1px;z-index:500;transition:transform .35s cubic-bezier(.4,0,.2,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* MOBILE */
+@media(max-width:768px){
+  nav{padding:0 1rem}
+  .nav-links{gap:1rem}
+  .nav-links .ig-link span{display:none}
+  .hero h1{font-size:clamp(36px,12vw,80px)}
+  .section{padding:3rem 1rem}
+  .section-title{font-size:32px}
+  .products-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+  .cart-panel{width:100%}
+  .form-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">KULT<span>R</span></a>
+  <div class="nav-links">
+    <a href="#drops">Drops</a>
+    <a href="#ig-section" class="ig-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+      <span>Shop on IG</span>
+    </a>
+    <button class="cart-btn" onclick="toggleCart()">
+      Cart <span class="cart-count" id="cart-count">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas class="hero-canvas" id="hero-canvas"></canvas>
+  <div class="hero-overlay"></div>
+  <div class="hero-scanlines"></div>
+  <div class="hero-grain" id="hero-grain"></div>
+  <div class="hero-tag">Streetwear for the culture</div>
+  <h1>Wear your <em>identity.</em></h1>
+  <p class="hero-sub">Limited drops. Bold designs. Made for those who don't follow trends — they set them.</p>
+  <div class="hero-cta">
+    <a href="#drops" class="btn btn-primary">Shop the drop</a>
+    <a href="#ig-section" class="btn btn-outline">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/></svg>
+      Follow @kultr
+    </a>
+  </div>
+  <div class="scroll-hint">Scroll to explore</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-inner">
+    <span>Limited edition <b>///</b></span>
+    <span>Premium 220 GSM cotton <b>///</b></span>
+    <span>Designed in India <b>///</b></span>
+    <span>Free shipping above ₹999 <b>///</b></span>
+    <span>Streetwear for the bold <b>///</b></span>
+    <span>Limited edition <b>///</b></span>
+    <span>Premium 220 GSM cotton <b>///</b></span>
+    <span>Designed in India <b>///</b></span>
+    <span>Free shipping above ₹999 <b>///</b></span>
+    <span>Streetwear for the bold <b>///</b></span>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="section" id="drops">
+  <div class="section-header">
+    <div>
+      <div class="section-sub">Latest collection</div>
+      <h2 class="section-title">The drops</h2>
+    </div>
+    <div class="section-sub">6 designs · limited stock</div>
+  </div>
+  <div class="products-grid" id="products-grid"></div>
+</section>
+
+<!-- FEATURES -->
+<div class="features">
+  <div class="feat"><div class="feat-icon">220</div><div class="feat-title">Heavy GSM cotton</div><div class="feat-desc">Premium bio-washed fabric that holds shape wash after wash</div></div>
+  <div class="feat"><div class="feat-icon">48H</div><div class="feat-title">Fast dispatch</div><div class="feat-desc">Ships within 48 hours from our warehouse in India</div></div>
+  <div class="feat"><div class="feat-icon">UPI</div><div class="feat-title">Easy payments</div><div class="feat-desc">UPI, cards, net banking via Razorpay. Prepaid gets 5% off</div></div>
+  <div class="feat"><div class="feat-icon">7D</div><div class="feat-title">Easy returns</div><div class="feat-desc">No questions asked exchange within 7 days of delivery</div></div>
+</div>
+
+<!-- INSTAGRAM SECTION -->
+<section class="ig-section" id="ig-section">
+  <h2>Shop on Instagram</h2>
+  <p>DM us your order or browse our catalog on Instagram. We ship pan-India.</p>
+  <a href="https://instagram.com/kultr" target="_blank" class="ig-btn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+    @kultr on Instagram
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="logo">KULT<span>R</span></div>
+    <p>Streetwear brand born from the culture. Designed in India for those who wear their identity loud.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Shop</h4>
+    <a href="#drops">All drops</a>
+    <a href="#">Oversized tees</a>
+    <a href="#">Graphic tees</a>
+    <a href="#">Accessories</a>
+  </div>
+  <div class="footer-col">
+    <h4>Help</h4>
+    <a href="#">Size guide</a>
+    <a href="#">Shipping info</a>
+    <a href="#">Returns & exchanges</a>
+    <a href="#">Contact us</a>
+  </div>
+  <div class="footer-col">
+    <h4>Follow</h4>
+    <a href="https://instagram.com/kultr" target="_blank">Instagram</a>
+    <a href="#">Twitter / X</a>
+    <a href="#">WhatsApp</a>
+  </div>
+  <div class="footer-bottom">&copy; 2026 KULTR. All rights reserved. Made with grit in India.</div>
+</footer>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+<div class="cart-panel" id="cart-panel">
+  <div class="cart-head">
+    <h3>Your cart</h3>
+    <button class="close-cart" onclick="toggleCart()">&times;</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty">Your cart is empty.<br>Go grab some heat.</div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span class="cart-total-label">Total</span>
+      <span class="cart-total-val" id="cart-total">₹0</span>
+    </div>
+    <button class="checkout-btn" id="checkout-btn" onclick="openCheckout()" disabled>Checkout</button>
+    <button class="ig-checkout" onclick="window.open('https://instagram.com/kultr','_blank')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/></svg>
+      Or buy via Instagram DM
+    </button>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="checkout-overlay" id="checkout-overlay">
+  <div class="checkout-modal" style="position:relative">
+    <button class="close-modal" onclick="closeCheckout()">&times;</button>
+    <h3>Checkout</h3>
+    <div class="subtitle">Secure checkout — we accept UPI, cards, net banking</div>
+    <div class="form-row"><label>Full name</label><input type="text" placeholder="Rahul Kumar"></div>
+    <div class="form-row"><label>Email</label><input type="email" placeholder="rahul@email.com"></div>
+    <div class="form-row"><label>Phone (WhatsApp)</label><input type="tel" placeholder="+91 98765 43210"></div>
+    <div class="form-row"><label>Delivery address</label><input type="text" placeholder="House no, street, landmark"></div>
+    <div class="form-grid">
+      <div class="form-row"><label>City</label><input type="text" placeholder="Chennai"></div>
+      <div class="form-row"><label>Pincode</label><input type="text" placeholder="600001"></div>
+    </div>
+    <div class="form-row"><label>State</label><select><option>Tamil Nadu</option><option>Karnataka</option><option>Maharashtra</option><option>Delhi</option><option>Kerala</option><option>Telangana</option><option>Other</option></select></div>
+    <div class="form-row"><label>Payment method</label><select><option>UPI (5% off!)</option><option>Credit / Debit card</option><option>Net banking</option></select></div>
+    <div class="order-summary" id="order-summary"></div>
+    <button class="place-order-btn" onclick="placeOrder()">Place order</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const PRODUCTS = [
+  {id:1,name:'KULTR Logo oversize',desc:'Signature logo tee. Oversized drop-shoulder fit.',price:799,mrp:1299,tag:'Bestseller',
+   colors:['#f0ede6','#0a0a0a','#6b7c3f'],colorNames:['Off-white','Black','Olive'],designs:['KULTR','KULTR','KULTR']},
+  {id:2,name:'Concrete jungle',desc:'Urban skyline graphic. Heavy cotton.',price:899,mrp:1499,tag:'New',
+   colors:['#0a0a0a','#3a3a3a','#1a2a3a'],colorNames:['Black','Charcoal','Navy'],designs:['CNCRT','CNCRT','CNCRT']},
+  {id:3,name:'Static noise tee',desc:'Glitch-art print. Raw edge collar.',price:699,mrp:1199,tag:'',
+   colors:['#f0ede6','#0a0a0a','#5a2a2a'],colorNames:['Off-white','Black','Maroon'],designs:['STATIC','STATIC','STATIC']},
+  {id:4,name:'KULTR block type',desc:'Bold block typography. Back print.',price:849,mrp:1399,tag:'Limited',
+   colors:['#0a0a0a','#2a2a4a','#f0ede6'],colorNames:['Black','Indigo','Cream'],designs:['BLOCK','BLOCK','BLOCK']},
+  {id:5,name:'Midnight rider',desc:'Biker-inspired graphic. Washed look.',price:999,mrp:1599,tag:'',
+   colors:['#0a0a0a','#3a3a3a','#4a3a2a'],colorNames:['Black','Smoke','Brown'],designs:['RIDER','RIDER','RIDER']},
+  {id:6,name:'Culture code',desc:'Minimal code-style print. Tech meets street.',price:749,mrp:1199,tag:'New',
+   colors:['#f0ede6','#0a0a0a','#2a3a2a'],colorNames:['Off-white','Black','Forest'],designs:['</>','</>','</>']}
+];
+
+const SIZES = ['S','M','L','XL','XXL'];
+let cart = [];
+
+function renderProducts(){
+  const grid = document.getElementById('products-grid');
+  grid.innerHTML = PRODUCTS.map((p,i) => `
+    <div class="product-card" data-id="${p.id}">
+      <div class="product-img" style="background:${p.colors[0]==='#f0ede6'?'#1e1e1e':p.colors[0]==='#0a0a0a'?'#1e1e1e':'#1e1e1e'}">
+        ${p.tag?`<div class="product-tag">${p.tag}</div>`:''}
+        <div class="tee-visual" id="tee-${p.id}" style="background:${p.colors[0]}; color:${p.colors[0]==='#0a0a0a'?'#f0ede6':'#0a0a0a'}">
+          <div class="tee-collar"></div>
+          <div class="tee-sleeve-l" style="background:${p.colors[0]}"></div>
+          <div class="tee-sleeve-r" style="background:${p.colors[0]}"></div>
+          ${p.designs[0]}
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-price">₹${p.price.toLocaleString('en-IN')} <span class="mrp">₹${p.mrp.toLocaleString('en-IN')}</span></div>
+        <div class="option-label">Color — <span id="color-name-${p.id}">${p.colorNames[0]}</span></div>
+        <div class="color-options">
+          ${p.colors.map((c,ci)=>`<div class="color-dot ${ci===0?'active':''}" style="background:${c};${c==='#f0ede6'?'box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)':''}" data-pid="${p.id}" data-ci="${ci}" onclick="selectColor(${p.id},${ci})"></div>`).join('')}
+        </div>
+        <div class="option-label">Size</div>
+        <div class="size-options">
+          ${SIZES.map((s,si)=>`<div class="size-btn ${si===1?'active':''}" data-pid="${p.id}" data-si="${si}" onclick="selectSize(${p.id},${si})">${s}</div>`).join('')}
+        </div>
+        <button class="add-cart-btn" id="add-btn-${p.id}" onclick="addToCart(${p.id})">Add to cart</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectColor(pid,ci){
+  const p=PRODUCTS.find(x=>x.id===pid);
+  document.querySelectorAll(`.color-dot[data-pid="${pid}"]`).forEach((d,i)=>d.classList.toggle('active',i===ci));
+  document.getElementById(`color-name-${pid}`).textContent=p.colorNames[ci];
+  const tee=document.getElementById(`tee-${pid}`);
+  const c=p.colors[ci];
+  tee.style.background=c;
+  tee.style.color=c==='#0a0a0a'||c.match(/^#[0-3]/)?'#f0ede6':'#0a0a0a';
+  tee.querySelectorAll('.tee-sleeve-l,.tee-sleeve-r').forEach(s=>s.style.background=c);
+}
+
+function selectSize(pid,si){
+  document.querySelectorAll(`.size-btn[data-pid="${pid}"]`).forEach((d,i)=>d.classList.toggle('active',i===si));
+}
+
+function getSelectedOptions(pid){
+  const colorEl=document.querySelector(`.color-dot.active[data-pid="${pid}"]`);
+  const sizeEl=document.querySelector(`.size-btn.active[data-pid="${pid}"]`);
+  const ci=colorEl?parseInt(colorEl.dataset.ci):0;
+  const si=sizeEl?parseInt(sizeEl.dataset.si):1;
+  return{ci,si};
+}
+
+function addToCart(pid){
+  const p=PRODUCTS.find(x=>x.id===pid);
+  const{ci,si}=getSelectedOptions(pid);
+  const existing=cart.find(x=>x.pid===pid&&x.ci===ci&&x.si===si);
+  if(existing){existing.qty++;} else {
+    cart.push({pid,ci,si,qty:1,name:p.name,price:p.price,color:p.colors[ci],colorName:p.colorNames[ci],size:SIZES[si],design:p.designs[ci]});
+  }
+  updateCart();
+  const btn=document.getElementById(`add-btn-${pid}`);
+  btn.textContent='Added!';
+  btn.classList.add('added-feedback');
+  setTimeout(()=>{btn.textContent='Add to cart';btn.classList.remove('added-feedback')},1200);
+  showToast(`${p.name} added to cart`);
+}
+
+function updateCart(){
+  const count=cart.reduce((a,b)=>a+b.qty,0);
+  document.getElementById('cart-count').textContent=count;
+  const total=cart.reduce((a,b)=>a+b.price*b.qty,0);
+  document.getElementById('cart-total').textContent='₹'+total.toLocaleString('en-IN');
+  document.getElementById('checkout-btn').disabled=cart.length===0;
+  const container=document.getElementById('cart-items');
+  if(cart.length===0){container.innerHTML='<div class="cart-empty">Your cart is empty.<br>Go grab some heat.</div>';return;}
+  container.innerHTML=cart.map((item,idx)=>`
+    <div class="cart-item">
+      <div class="cart-item-img" style="background:${item.color};color:${item.color==='#0a0a0a'||item.color.match(/^#[0-3]/)?'#f0ede6':'#0a0a0a'}">${item.design}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-meta">${item.colorName} · ${item.size}</div>
+        <div class="cart-item-bottom">
+          <div class="cart-item-price">₹${(item.price*item.qty).toLocaleString('en-IN')}</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="qty-ctrl">
+              <button class="qty-btn" onclick="changeQty(${idx},-1)">-</button>
+              <span class="qty-val">${item.qty}</span>
+              <button class="qty-btn" onclick="changeQty(${idx},1)">+</button>
+            </div>
+            <button class="remove-item" onclick="removeItem(${idx})">&times;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function changeQty(idx,d){
+  cart[idx].qty+=d;
+  if(cart[idx].qty<1)cart.splice(idx,1);
+  updateCart();
+}
+
+function removeItem(idx){
+  cart.splice(idx,1);
+  updateCart();
+}
+
+function toggleCart(){
+  document.getElementById('cart-overlay').classList.toggle('open');
+  document.getElementById('cart-panel').classList.toggle('open');
+}
+
+function openCheckout(){
+  toggleCart();
+  const total=cart.reduce((a,b)=>a+b.price*b.qty,0);
+  const shipping=total>=999?0:79;
+  document.getElementById('order-summary').innerHTML=
+    cart.map(i=>`<div class="order-line"><span>${i.name} (${i.size}, ${i.colorName}) x${i.qty}</span><span>₹${(i.price*i.qty).toLocaleString('en-IN')}</span></div>`).join('')+
+    `<div class="order-line"><span>Shipping</span><span>${shipping===0?'Free':'₹'+shipping}</span></div>`+
+    `<div class="order-line total"><span>Total</span><span>₹${(total+shipping).toLocaleString('en-IN')}</span></div>`;
+  document.getElementById('checkout-overlay').classList.add('open');
+}
+
+function closeCheckout(){
+  document.getElementById('checkout-overlay').classList.remove('open');
+}
+
+function placeOrder(){
+  closeCheckout();
+  cart=[];
+  updateCart();
+  showToast('Order placed! You\'ll receive confirmation on WhatsApp.');
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+renderProducts();
+
+// HERO CANVAS ANIMATION
+(function(){
+  const canvas=document.getElementById('hero-canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H,frame=0;
+
+  function resize(){
+    W=canvas.width=canvas.parentElement.offsetWidth;
+    H=canvas.height=canvas.parentElement.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize',resize);
+
+  const accent='#d4ff2b';
+  const accentDim='rgba(212,255,43,';
+
+  // Floating geometric shapes
+  const shapes=[];
+  for(let i=0;i<18;i++){
+    shapes.push({
+      x:Math.random()*2000-500,y:Math.random()*1200-100,
+      vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.3,
+      size:Math.random()*80+20,
+      rotation:Math.random()*Math.PI*2,
+      rotSpeed:(Math.random()-.5)*.008,
+      type:Math.floor(Math.random()*4),
+      opacity:Math.random()*.06+.02,
+      strokeOnly:Math.random()>.5
+    });
+  }
+
+  // Drifting horizontal lines (like city light streaks)
+  const streaks=[];
+  for(let i=0;i<8;i++){
+    streaks.push({
+      y:Math.random()*1200,
+      speed:Math.random()*1.5+.3,
+      length:Math.random()*400+100,
+      x:Math.random()*2000-500,
+      opacity:Math.random()*.08+.02,
+      color:Math.random()>.7?accent:'#ffffff'
+    });
+  }
+
+  // Floating text fragments
+  const words=['KULTR','CULTURE','STREET','BOLD','RAW','DROP','GRIND','IDENTITY','///'];
+  const textParticles=[];
+  for(let i=0;i<6;i++){
+    textParticles.push({
+      word:words[Math.floor(Math.random()*words.length)],
+      x:Math.random()*2000,y:Math.random()*1200,
+      vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.15,
+      size:Math.random()*30+14,
+      opacity:Math.random()*.04+.01,
+      rotation:(Math.random()-.5)*.3
+    });
+  }
+
+  // Glitch bars
+  let glitchTimer=0;
+  let glitchBars=[];
+
+  function triggerGlitch(){
+    glitchBars=[];
+    const count=Math.floor(Math.random()*4)+2;
+    for(let i=0;i<count;i++){
+      glitchBars.push({
+        y:Math.random()*H,
+        h:Math.random()*6+2,
+        offset:(Math.random()-.5)*20,
+        life:Math.random()*8+4
+      });
+    }
+  }
+
+  function drawShape(s){
+    ctx.save();
+    ctx.translate(s.x,s.y);
+    ctx.rotate(s.rotation);
+    ctx.globalAlpha=s.opacity;
+
+    if(s.strokeOnly){
+      ctx.strokeStyle=accent;
+      ctx.lineWidth=.5;
+    }else{
+      ctx.fillStyle='#ffffff';
+    }
+
+    switch(s.type){
+      case 0: // square
+        if(s.strokeOnly) ctx.strokeRect(-s.size/2,-s.size/2,s.size,s.size);
+        else ctx.fillRect(-s.size/2,-s.size/2,s.size,s.size);
+        break;
+      case 1: // triangle
+        ctx.beginPath();
+        ctx.moveTo(0,-s.size/2);
+        ctx.lineTo(s.size/2,s.size/2);
+        ctx.lineTo(-s.size/2,s.size/2);
+        ctx.closePath();
+        if(s.strokeOnly) ctx.stroke(); else ctx.fill();
+        break;
+      case 2: // circle
+        ctx.beginPath();
+        ctx.arc(0,0,s.size/2,0,Math.PI*2);
+        if(s.strokeOnly) ctx.stroke(); else ctx.fill();
+        break;
+      case 3: // cross
+        ctx.lineWidth=2;
+        ctx.strokeStyle=s.strokeOnly?accent:'rgba(255,255,255,'+s.opacity+')';
+        ctx.beginPath();
+        ctx.moveTo(-s.size/2,0);ctx.lineTo(s.size/2,0);
+        ctx.moveTo(0,-s.size/2);ctx.lineTo(0,s.size/2);
+        ctx.stroke();
+        break;
+    }
+    ctx.restore();
+  }
+
+  function draw(){
+    frame++;
+    ctx.clearRect(0,0,W,H);
+
+    // Dark base
+    ctx.fillStyle='#0a0a0a';
+    ctx.fillRect(0,0,W,H);
+
+    // Subtle vignette-like gradient blobs
+    ctx.globalAlpha=.04;
+    ctx.fillStyle=accent;
+    ctx.beginPath();
+    ctx.arc(W*.7,H*.3,300,0,Math.PI*2);
+    ctx.fill();
+    ctx.fillStyle='#1a1a3a';
+    ctx.beginPath();
+    ctx.arc(W*.2,H*.7,250,0,Math.PI*2);
+    ctx.fill();
+    ctx.globalAlpha=1;
+
+    // Shapes
+    shapes.forEach(s=>{
+      s.x+=s.vx;s.y+=s.vy;s.rotation+=s.rotSpeed;
+      if(s.x>W+100)s.x=-100;if(s.x<-100)s.x=W+100;
+      if(s.y>H+100)s.y=-100;if(s.y<-100)s.y=H+100;
+      drawShape(s);
+    });
+
+    // Light streaks
+    streaks.forEach(s=>{
+      s.x+=s.speed;
+      if(s.x>W+200){s.x=-s.length-100;s.y=Math.random()*H;}
+      ctx.globalAlpha=s.opacity;
+      ctx.strokeStyle=s.color;
+      ctx.lineWidth=1;
+      ctx.beginPath();
+      ctx.moveTo(s.x,s.y);
+      ctx.lineTo(s.x+s.length,s.y);
+      ctx.stroke();
+    });
+
+    // Text fragments
+    ctx.globalAlpha=1;
+    textParticles.forEach(tp=>{
+      tp.x+=tp.vx;tp.y+=tp.vy;
+      if(tp.x>W+200)tp.x=-200;if(tp.x<-200)tp.x=W+200;
+      if(tp.y>H+100)tp.y=-100;if(tp.y<-100)tp.y=H+100;
+      ctx.save();
+      ctx.translate(tp.x,tp.y);
+      ctx.rotate(tp.rotation);
+      ctx.globalAlpha=tp.opacity;
+      ctx.font=tp.size+'px "Bebas Neue",sans-serif';
+      ctx.fillStyle='#ffffff';
+      ctx.letterSpacing='4px';
+      ctx.fillText(tp.word,0,0);
+      ctx.restore();
+    });
+
+    // Glitch effect (occasional)
+    glitchTimer++;
+    if(glitchTimer>180+Math.random()*240){
+      triggerGlitch();
+      glitchTimer=0;
+    }
+    glitchBars=glitchBars.filter(g=>{
+      g.life--;
+      if(g.life<=0)return false;
+      ctx.globalAlpha=.12;
+      ctx.fillStyle=Math.random()>.5?accent:'#ffffff';
+      ctx.fillRect(g.offset,g.y,W,g.h);
+      return true;
+    });
+
+    // Accent diagonal line (slow drift)
+    ctx.globalAlpha=.03;
+    ctx.strokeStyle=accent;
+    ctx.lineWidth=1;
+    const diagOffset=Math.sin(frame*.003)*100;
+    ctx.beginPath();
+    ctx.moveTo(W*.3+diagOffset,0);
+    ctx.lineTo(W*.6+diagOffset,H);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(W*.65-diagOffset*0.5,0);
+    ctx.lineTo(W*.35-diagOffset*0.5,H);
+    ctx.stroke();
+
+    ctx.globalAlpha=1;
+    requestAnimationFrame(draw);
+  }
+
+  // Generate noise texture for grain overlay
+  const grainCanvas=document.createElement('canvas');
+  grainCanvas.width=256;grainCanvas.height=256;
+  const gctx=grainCanvas.getContext('2d');
+  const imgData=gctx.createImageData(256,256);
+  for(let i=0;i<imgData.data.length;i+=4){
+    const v=Math.random()*255;
+    imgData.data[i]=v;imgData.data[i+1]=v;imgData.data[i+2]=v;imgData.data[i+3]=255;
+  }
+  gctx.putImageData(imgData,0,0);
+  document.getElementById('hero-grain').style.backgroundImage='url('+grainCanvas.toDataURL()+')';
+  document.getElementById('hero-grain').style.backgroundSize='256px 256px';
+
+  draw();
+})();
+</script>
+</body>
+</html>
